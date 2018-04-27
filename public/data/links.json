@@ -1,0 +1,17 @@
+[
+  {
+    "url": "https://medium.com/tyrone-tudehope/composing-d3-visualizations-with-vue-js-c65084ccb686",
+    "title": "Composing D3 Visualizations with Vuejs",
+    "tags": [ "tutorials", "frontend", "d3js", "javascript"]
+  },
+  {
+    "url": "https://bost.ocks.org/mike/circles/",
+    "title": "Three Little Circles",
+    "tags": [ "tutorials", "frontend", "d3js", "javascript"]
+  },
+  {
+    "url": "http://underscorejs.org/",
+    "title": "Underscore",
+    "tags": [ "javascript", "libraries" ]
+  }
+]
