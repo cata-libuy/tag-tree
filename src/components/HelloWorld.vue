@@ -30,6 +30,7 @@ export default {
       const tagsData = _.map(tags, (tagName) => {
         return {
           label: tagName,
+          links: _.filter(this.links, (link) => link.tags.indexOf(tagName) > -1),
           relationScore: _.reduce(this.links, (memo, link) => {
             return memo + _.filter(link.tags, tag => tag === tagName).length
           }, 1),
@@ -56,6 +57,31 @@ export default {
       const stepAngle = max / siblingTags.length
       const tagIndex = _.findIndex(siblingTags, (sibTag) => sibTag.label === tag.label) + 1
       return stepAngle * tagIndex
+    },
+    onTagClick (tag) {
+      const svg = this.$d3.select('svg')
+      let selectedTag = svg.select('#' + tag.label)
+      const isSelected = selectedTag.attr('selected')
+      if (isSelected !== 'true') {
+        selectedTag.style('fill', 'red').attr('selected', true)
+        const group = svg
+          .append('g')
+          .style('width', '200px')
+          .style('height', '200px')
+          .style('background-color', 'green')
+          .attr('transform', `translate(${tag.position.x + 50}, ${tag.position.y})`)
+          .attr('id', tag.label)
+        const links = group
+          .selectAll('text')
+          .data(tag.links)
+          .enter()
+          .append('text')
+          .text(data => data.title)
+          .attr('y', (data, index) => index * 20)
+      } else {
+        selectedTag.style('fill', 'black').attr('selected', false)
+        svg.selectAll(`g#${tag.label}`).remove()
+      }
     },
     /* De acuerdo a importancia, posiciona la primera al centro
     y las siguientes en puntos aleatorios equidistantes al centro de acuerdo a su importancia.
@@ -91,29 +117,6 @@ export default {
         return
       })
     },
-    renderTagsAligned () {
-      const getRadius = data => 15 + 10 * data.relationScore
-      const getY = index => 150
-      const getX = index => 50 * 3 * (index + 1)
-      const svg = this.$d3.select('svg')
-      svg.selectAll("circle")
-        .data(this.tags)
-          .enter()
-          .append("circle")
-          .attr('cy', (data, index) => getY(index))
-          .attr('cx', (data, index) => getX(index))
-          .attr('r', (data) => getRadius(data))
-      svg.selectAll("text")
-        .data(this.tags)
-          .enter()
-          .append("text")
-          .attr('y', (data, index) => getY(index))
-          .attr('x', (data, index) => getX(index))
-          .text((data) => data.label)
-          .attr('font-family', 'sans-serif')
-          .attr('font-size', '14px')
-          .attr('fill', 'yellow')
-    },
     renderTags () {
       this.updateTagsPositions()
       console.log(this.tags)
@@ -126,16 +129,21 @@ export default {
           .attr('cy', (data) => data.position.y)
           .attr('cx', (data) => data.position.x)
           .attr('r', (data) => getRadius(data))
+          .attr('id', data => data.label)
+          .attr('selected', false)
+          .on('click', (data) => this.onTagClick(data))
       svg.selectAll("text")
         .data(this.tags)
           .enter()
           .append("text")
           .attr('y', (data) => data.position.y)
-          .attr('x', (data) => data.position.x)
+          .attr('x', (data) => data.position.x - getRadius(data) * 0.5)
           .text((data) => data.label)
           .attr('font-family', 'sans-serif')
           .attr('font-size', '14px')
           .attr('fill', 'yellow')
+          .attr('text-align', 'center')
+          .attr('width', getRadius(data) * 2)
     }
   },
   created: function () {
