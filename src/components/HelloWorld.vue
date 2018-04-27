@@ -49,6 +49,14 @@ export default {
     getCanvasCenter (tag) {
       return { x: parseInt(this.width / 2), y: parseInt(this.height / 2) }
     },
+    getTagAngle (tag) {
+      const min = 0
+      const max = 2 * Math.PI
+      const siblingTags = _.sortBy(_.filter(this.tags, (sibTag) => sibTag.relationScore === tag.relationScore), tag => tag.label)
+      const stepAngle = max / siblingTags.length
+      const tagIndex = _.findIndex(siblingTags, (sibTag) => sibTag.label === tag.label) + 1
+      return stepAngle * tagIndex
+    },
     /* De acuerdo a importancia, posiciona la primera al centro
     y las siguientes en puntos aleatorios equidistantes al centro de acuerdo a su importancia.
     TODO: generar distintos centros para tags no relacionadas */
@@ -65,26 +73,21 @@ export default {
           distanceToCenter = distanceToCenter + growStep
         }
         lastWeight = tag.relationScore
-        const min = 0
-        const max = 2 * Math.PI
-        let thita = Math.random() * (max - min) + min
-        // let thita = Math.PI/4
-        console.log('thita for', tag.label, thita)
+        let thita = this.getTagAngle(tag)
         tag.position = {
           x: thita >= 0 && thita < Math.PI / 2 // estoy en cuadrante 1
             ? parseInt(center.x + Math.cos(thita) * distanceToCenter)
             : thita ===  Math.PI / 2 || thita === 3 * Math.PI / 2 // estoy en eje y, x no se mueve
               ? center.x
               : thita < 3 * Math.PI / 2 // estoy en cuadrantes 2 o 3
-                ? parseInt(center.x - Math.cos(thita) * distanceToCenter)
+                ? parseInt(center.x + Math.cos(thita) * distanceToCenter)
                 : parseInt(center.x + Math.cos(thita) * distanceToCenter),
           y: thita > 0 && thita < Math.PI // cuadrantes 1 o 2, resto altura
               ? parseInt(center.y - Math.sin(thita) * distanceToCenter)
               : thita == 0 || thita == Math.PI || thita == 2 * Math.PI
                 ? parseInt(center.y)
-                : parseInt(center.y + Math.sin(thita) * distanceToCenter) // cuadrantes 3 o 4, sumo altura
+                : parseInt(center.y - Math.sin(thita) * distanceToCenter) // cuadrantes 3 o 4, sumo altura
         }
-        console.log(tag.label, tag.position)
         return
       })
     },
