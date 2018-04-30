@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     getCanvasCenter (tag) {
-      return { x: parseInt(this.width / 2), y: parseInt(this.height / 2) }
+      return { x: parseInt((this.width / 2) - 200), y: parseInt(this.height / 2) }
     },
     getTagAngle (tag) {
       const min = 0
@@ -63,28 +63,50 @@ export default {
       let selectedTag = svg.select('#' + tag.label)
       const isSelected = selectedTag.attr('selected')
       if (isSelected !== 'true') {
-        selectedTag.style('fill', 'red').attr('selected', true)
+        const unselectedTags = svg.selectAll('.unselected').attr('opacity', 0.3)
+        selectedTag.style('fill', 'red')
+        .attr('selected', true)
+        .attr('opacity', 1)
+        .classed('selected', 'true')
         const group = svg
           .append('g')
-          .style('width', '200px')
-          .style('height', '200px')
-          .style('background-color', 'green')
           .attr('transform', `translate(${tag.position.x + 50}, ${tag.position.y})`)
           .attr('id', tag.label)
+
         const links = group
-          .selectAll('text')
+          .selectAll('a')
           .data(tag.links)
           .enter()
-          .append('text')
-          .text(data => data.title)
+          .append('a')
+          .attr('href', data => data.url)
+          .attr('target', '_blank')
           .attr('y', (data, index) => index * 20)
+
+      var link = links
+            .append('g')
+
+      link.append('rect')
+          .attr('fill', 'green')
+          .attr('width', 250)
+          .attr('height', 30)
+          .attr('y', (data, index) => index * 50 -20)
+          .attr('x', 10)
+
+      link.append('text')
+          .text(data => data.title)
+          .attr('y', (data, index) => index * 50)
+          .attr('x', 20)
+
       } else {
-        selectedTag.style('fill', 'black').attr('selected', false)
+        selectedTag.style('fill', 'black')
+        .attr('selected', false)
+        .classed('selected', 'false')
         svg.selectAll(`g#${tag.label}`).remove()
+        const unselectedTags = svg.selectAll('.unselected').attr('opacity', 1)
       }
     },
     /* De acuerdo a importancia, posiciona la primera al centro
-    y las siguientes en puntos aleatorios equidistantes al centro de acuerdo a su importancia.
+    y las siguientes en puntos aleatorios equidistantes al centro
     TODO: generar distintos centros para tags no relacionadas */
     updateTagsPositions () {
       const center = this.getCanvasCenter()
@@ -101,18 +123,8 @@ export default {
         lastWeight = tag.relationScore
         let thita = this.getTagAngle(tag)
         tag.position = {
-          x: thita >= 0 && thita < Math.PI / 2 // estoy en cuadrante 1
-            ? parseInt(center.x + Math.cos(thita) * distanceToCenter)
-            : thita ===  Math.PI / 2 || thita === 3 * Math.PI / 2 // estoy en eje y, x no se mueve
-              ? center.x
-              : thita < 3 * Math.PI / 2 // estoy en cuadrantes 2 o 3
-                ? parseInt(center.x + Math.cos(thita) * distanceToCenter)
-                : parseInt(center.x + Math.cos(thita) * distanceToCenter),
-          y: thita > 0 && thita < Math.PI // cuadrantes 1 o 2, resto altura
-              ? parseInt(center.y - Math.sin(thita) * distanceToCenter)
-              : thita == 0 || thita == Math.PI || thita == 2 * Math.PI
-                ? parseInt(center.y)
-                : parseInt(center.y - Math.sin(thita) * distanceToCenter) // cuadrantes 3 o 4, sumo altura
+          x: parseInt(center.x + Math.cos(thita) * distanceToCenter),
+          y: parseInt(center.y - Math.sin(thita) * distanceToCenter)
         }
         return
       })
@@ -131,19 +143,20 @@ export default {
           .attr('r', (data) => getRadius(data))
           .attr('id', data => data.label)
           .attr('selected', false)
+          .classed('unselected', true)
           .on('click', (data) => this.onTagClick(data))
       svg.selectAll("text")
         .data(this.tags)
           .enter()
-          .append("text")
-          .attr('y', (data) => data.position.y)
-          .attr('x', (data) => data.position.x - getRadius(data) * 0.5)
-          .text((data) => data.label)
-          .attr('font-family', 'sans-serif')
-          .attr('font-size', '14px')
-          .attr('fill', 'yellow')
-          .attr('text-align', 'center')
-          .attr('width', getRadius(data) * 2)
+            .append("text")
+            .attr('y', (data) => data.position.y)
+            .attr('x', (data) => data.position.x - getRadius(data) * 0.5)
+            .text((data) => data.label)
+            .attr('font-family', 'sans-serif')
+            .attr('font-size', '14px')
+            .attr('fill', 'yellow')
+            .attr('text-align', 'center')
+            .attr('textLength', getRadius(data) * 2)
     }
   },
   created: function () {
