@@ -23,27 +23,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['links']),
-    tags () { // Obtiene los tags y sus relaciones
-      const tags = _.uniq(_.flatten(_.pluck(this.links, 'tags')))
-      const tagsData = _.map(tags, (tagName) => {
-        return {
-          label: tagName,
-          links: _.filter(this.links, (link) => link.tags.indexOf(tagName) > -1),
-          relationScore: _.reduce(this.links, (memo, link) => {
-            return memo + _.filter(link.tags, tag => tag === tagName).length
-          }, 1),
-          relatedTo: _.reduce(this.links, (memo, link) => {
-            if (link.tags.indexOf(tagName) > -1) {
-              return _.without(_.uniq(_.flatten([memo, link.tags])), tagName)
-            }
-            return memo
-          }, []),
-          position: this.getCanvasCenter()
-        }
-      })
-      return _.sortBy(tagsData, (tag) => tag.relationScore).reverse()
-    }
+    ...mapGetters([ 'links', 'tags' ])
   },
   methods: {
     ...mapActions(['getLinks']),

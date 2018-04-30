@@ -3,7 +3,7 @@ import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
 
-export const getLinks = ({ commit, state }) => {
+export const getLinks = ({ commit }) => {
 Vue.http.get('data/links.json')
   .then(
     (res) => {
