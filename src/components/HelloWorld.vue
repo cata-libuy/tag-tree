@@ -8,8 +8,7 @@
 <script>
 import * as _ from 'underscore'
 import Vue from 'vue'
-import VueResource from 'vue-resource'
-Vue.use(VueResource)
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'HelloWorld',
@@ -20,11 +19,11 @@ export default {
     return {
       width: 900,
       height: 600,
-      circlesData: [],
-      links: []
+      circlesData: []
     }
   },
   computed: {
+    ...mapGetters(['links']),
     tags () { // Obtiene los tags y sus relaciones
       const tags = _.uniq(_.flatten(_.pluck(this.links, 'tags')))
       const tagsData = _.map(tags, (tagName) => {
@@ -47,6 +46,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getLinks']),
     getCanvasCenter (tag) {
       return { x: parseInt((this.width / 2) - 200), y: parseInt(this.height / 2) }
     },
@@ -109,25 +109,26 @@ export default {
     y las siguientes en puntos aleatorios equidistantes al centro
     TODO: generar distintos centros para tags no relacionadas */
     updateTagsPositions () {
-      const center = this.getCanvasCenter()
-      let lastWeight = this.tags[0].relationScore
-      let distanceToCenter = 0
-      const growStep = 150
-      _.each(this.tags, (tag, index) => {
-        if (index === 0) {
-          return tag.position = center
-        }
-        if (tag.relationScore < lastWeight) {
-          distanceToCenter = distanceToCenter + growStep
-        }
-        lastWeight = tag.relationScore
-        let thita = this.getTagAngle(tag)
-        tag.position = {
-          x: parseInt(center.x + Math.cos(thita) * distanceToCenter),
-          y: parseInt(center.y - Math.sin(thita) * distanceToCenter)
-        }
-        return
-      })
+      if (this.tags && this.tags.length > 0) {
+        const center = this.getCanvasCenter()
+        let lastWeight = this.tags[0].relationScore
+        let distanceToCenter = 0
+        const growStep = 150
+        _.each(this.tags, (tag, index) => {
+          if (index === 0) {
+            return tag.position = center
+          }
+          if (tag.relationScore < lastWeight) {
+            distanceToCenter = distanceToCenter + growStep
+          }
+          lastWeight = tag.relationScore
+          const thita = this.getTagAngle(tag)
+          return tag.position = {
+            x: parseInt(center.x + Math.cos(thita) * distanceToCenter),
+            y: parseInt(center.y - Math.sin(thita) * distanceToCenter)
+          }
+        })
+      }
     },
     renderTags () {
       this.updateTagsPositions()
@@ -160,15 +161,12 @@ export default {
     }
   },
   created: function () {
-  this.$http.get('data/links.json')
-    .then(
-      (res) => {
-        this.links = res.body ? res.body : []
-        console.log('links', this.links, 'tags', this.tags)
-        this.renderTags()
-      },
-      (err) => console.log(err)
-    )
+    this.getLinks()
+  },
+  watch: {
+    links: function () {
+      this.renderTags()
+    }
   },
   mounted () {
     this.$d3.selectAll('p').style('color', 'red')
