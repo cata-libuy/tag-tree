@@ -20,5 +20,11 @@ export const tags = (state) => { // Obtiene los tags y sus relaciones
       position: { x: 0, y: 0 }
     }
   })
-  return _.sortBy(tagsData, (tag) => tag.relationScore).reverse()
+  const orderedTags = _.sortBy(tagsData, (tag) => tag.relationScore).reverse()
+  console.log('tags', orderedTags)
+  return orderedTags
+}
+
+export const clusteresTags = (state) => {
+  let clusters = [] 
 }

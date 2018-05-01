@@ -13,5 +13,15 @@
     "url": "http://underscorejs.org/",
     "title": "Underscore",
     "tags": [ "javascript", "libraries" ]
+  },
+  {
+    "url": "https://www.udemy.com/the-complete-nodejs-developer-course-2/",
+    "title": "The Complete Nodejs Course",
+    "tags": [ "javascript", "tutorials", "backend", "nodejs" ]
+  },
+  {
+    "url": "https://stackoverflow.com/questions/33484877/svg-text-with-background-and-padding?rq=1",
+    "title": "Unrelated",
+    "tags": [ "help" ]
   }
 ]
