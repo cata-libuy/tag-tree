@@ -30,7 +30,12 @@ export const tagsData = (state) => { // Obtiene los tags y sus relaciones
   const vertices = _.reduce(
     toReduce,
     (memo, tagLinks) => {
-      return _.flatten([memo, tagLinks])
+      const newLinks = _.filter(tagLinks, (aLink) => {
+          return _.findIndex(memo, (memoLink) => {
+            return memoLink.source === aLink.target && memoLink.target === aLink.source
+          }) === -1;
+      });
+      return _.flatten([memo, newLinks])
     },
     []
   );
