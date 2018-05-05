@@ -38,3 +38,5 @@ export const tagsData = (state) => { // Obtiene los tags y sus relaciones
   );
   return { nodes: orderedTags, links: vertices }
 }
+
+export const selectedTag = state => state.selectedTag

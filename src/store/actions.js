@@ -15,3 +15,7 @@ Vue.http.get('data/links.json')
     (err) => console.log(err)
   )
 }
+
+export const selectTag = ({ commit }, tag) => {
+  commit('SET_SELECTED_TAG', { tag })
+}
