@@ -3,7 +3,6 @@ import * as _ from 'underscore'
 export const links = state => state.links
 
 export const tagsData = (state) => { // Obtiene los tags y sus relaciones
-  console.log('getter tagsData called');
   const tags = _.uniq(_.flatten(_.pluck(state.links, 'tags')));
   const tagsData = _.map(tags, (tagName) => {
     return {
@@ -20,13 +19,11 @@ export const tagsData = (state) => { // Obtiene los tags y sus relaciones
     }
   });
   const orderedTags = _.sortBy(tagsData, (tag) => tag.relationScore).reverse();
-  console.log('hello')
   const toReduce = _.map(orderedTags, (tag) => {
     return _.map(tag.relatedTo, (related) => {
       return { source: tag.label, target: related }
     });
   });
-  console.log('toReduce', toReduce)
   const vertices = _.reduce(
     toReduce,
     (memo, tagLinks) => {

@@ -14,9 +14,14 @@ import * as _ from 'underscore'
 export default {
   name: 'TagNode',
   props: ['tag'],
+  watch: {
+    tag: function (val) {
+      console.log('tag changed!', this.tag);
+    }
+  },
   computed: {
     transformGroup () {
-      return this.tag && this.tag.position ? `translate(${this.tag.position.x},${this.tag.position.y})` : 'translate(0,0)'
+      return `translate(${this.tag.x},${this.tag.y})`
     }
   },
   data: function () {
@@ -36,6 +41,9 @@ export default {
       console.log('index', index, link, this.tag.links)
       return `translate(${startAtX},${startAtY + 25 * index})`
     }
+  },
+  created () {
+    console.log('tag created', this.tag);
   }
 }
 </script>
