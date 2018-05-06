@@ -40,7 +40,7 @@ export default {
       var simulation = this.$d3.forceSimulation().nodes(nodes_data);
 
       var forceCollide = d3.forceCollide()
-        .radius(function  (d){return 75;})
+        .radius(75)
         .iterations(1)
         .strength(0.2);
 
@@ -54,7 +54,6 @@ export default {
         .force("center_force", d3.forceCenter(this.width / 2, this.height / 2))
         .force("collide", forceCollide);
 
-
       //draw lines for the links
       var link = svg.append("g")
           .attr("class", "links")
@@ -64,30 +63,13 @@ export default {
           .attr("stroke-width", 1)
           .attr("stroke", "#eaeaea");
 
-      //draw circles for the nodes
-      // var node = svg.append("g")
-      //     .attr("class", "nodes")
-      //     .selectAll("text")
-      //     .data(nodes_data)
-      //     .enter()
-      //     .append("text")
-      //     .text((d) => d.label)
-      //     .attr("fill", "#222")
-      //     .attr("text-anchor", "middle");
-
       function tickActions() {
-        self.simulatedNodes = simulation.nodes();
-        //update circle positions to reflect node updates on each tick of the simulation
+        self.simulatedNodes = simulation.nodes()
         link
           .attr("x1", function(d) { return d.source.x; })
           .attr("y1", function(d) { return d.source.y; })
           .attr("x2", function(d) { return d.target.x; })
-          .attr("y2", function(d) { return d.target.y; });
-        // var nodes = svg.selectAll("text.tag-node")
-        //     .data(nodes_data)
-        //     .enter()
-        //     .attr("x", function(d) { return d.x; })
-        //     .attr("y", function(d) { return d.y; });
+          .attr("y2", function(d) { return d.target.y; })
       }
       simulation.on("tick", tickActions);
     }
@@ -96,11 +78,8 @@ export default {
     this.getLinks()
   },
   watch: {
-    tagsData: function (val) {
+    tagsData: function () {
       this.renderTags()
-    },
-    simulatedNodes: function (val) {
-      console.log('simulatedNodes', this.simulatedNodes);
     }
   },
 

@@ -16,10 +16,7 @@ export default {
   name: 'TagNode',
   props: ['tag'],
   watch: {
-    tag: function (val) {
-      console.log('tag changed!', this.tag);
-    },
-    selectedTag (val) {
+    selectedTag () {
       if (this.selectedTag && this.selectedTag.label !== this.tag.label) {
         return this.vanish = true
       }
