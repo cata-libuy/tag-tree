@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.9",
     "d3": "^5.1.0",
     "markup-inline-loader": "^0.2.2",
     "underscore": "^1.9.0",

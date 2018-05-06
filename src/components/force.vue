@@ -3,9 +3,7 @@
     <svg id="force" :width="width" :height="height">
       <tag-node v-for="tag in simulatedNodes" :key="tag.label" :tag="tag"></tag-node>
     </svg>
-
   </div>
-
 </template>
 
 <script>
@@ -19,8 +17,8 @@ export default {
   },
   data () {
     return {
-      width: 900,
-      height: 500,
+      width: document && document.documentElement ? document.documentElement.clientWidth : 900,
+      height: document && document.documentElement ? document.documentElement.clientHeight : 500,
       tagData: {},
       simulatedNodes: []
     }
@@ -55,6 +53,7 @@ export default {
         .force("collide", forceCollide);
 
       //draw lines for the links
+      svg.selectAll('.links').remove()
       var link = svg.append("g")
           .attr("class", "links")
           .selectAll("line")

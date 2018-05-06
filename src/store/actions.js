@@ -19,3 +19,7 @@ Vue.http.get('data/links.json')
 export const selectTag = ({ commit }, tag) => {
   commit('SET_SELECTED_TAG', { tag })
 }
+
+export const addLinkToCollection = ({ commit }, link) => {
+  commit('ADD_LINK', { link })
+}

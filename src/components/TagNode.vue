@@ -38,7 +38,6 @@ export default {
   methods: {
     ...mapActions(['selectTag']),
     onTagClick () {
-      console.log('click')
       this.selected = !this.selected
       if (this.selected) {
         this.selectTag(this.tag)
@@ -50,19 +49,14 @@ export default {
       const startAtY = this.tag.links.length * 35 * -1 / 2
       const index = _.findIndex(this.tag.links, (aLink) => aLink.url === link.url) + 1
       const startAtX = this.tag.label.length * 7 + 20
-      console.log('index', index, link, this.tag.links)
       return `translate(${startAtX},${startAtY + 25 * index})`
     },
     onLinkClick (link) {
-      console.log('clicked', link);
       window.open(
         link.url,
         '_blank' // <- This is what makes it open in a new window.
       );
     }
-  },
-  created () {
-    console.log('tag created', this.tag);
   }
 }
 </script>

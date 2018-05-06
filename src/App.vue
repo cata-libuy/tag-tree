@@ -1,16 +1,19 @@
 <template>
   <div id="app">
+    <add-link> </add-link>
     <force-component> </force-component>
   </div>
 </template>
 
 <script>
 import forceComponent from './components/force'
+import AddLink from './components/addLink'
 
 export default {
   name: 'app',
   components: {
-    forceComponent
+    forceComponent,
+    AddLink
   }
 }
 </script>

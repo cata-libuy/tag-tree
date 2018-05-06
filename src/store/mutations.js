@@ -4,5 +4,9 @@ export const mutations = {
   },
   ['SET_SELECTED_TAG'] (state, { tag }) {
     state.selectedTag = tag
+  },
+  ['ADD_LINK'] (state, { link }) {
+    state.links.push(link)
+    console.log('link added')
   }
 }
