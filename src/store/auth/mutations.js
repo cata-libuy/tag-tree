@@ -1,0 +1,12 @@
+export const mutations = {
+  ['SET_USER'] (state, { user }) {
+    state.user = user
+    localStorage.setItem('user', JSON.stringify(user))
+  },
+  ['SET_REGISTER_ERROR'] (state, { message }) {
+    state.registerError = message
+  },
+  ['SET_LOGIN_ERROR'] (state, { message }) {
+    state.loginError = message
+  }
+}

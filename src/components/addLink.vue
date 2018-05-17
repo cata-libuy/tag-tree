@@ -6,7 +6,7 @@
       <b-form-input v-model="title" type="text" required placeholder="url ej: Buscador de Google" />
       <b-form-input v-model="tags" type="text" required placeholder="tags ej: buscador, google" />
       <b-button variant="primary" size="sm" @click="onSubmit()">Agregar</b-button>
-      <b-button variant="secondary" size="sm" @click="() => showForm = false">Cancelar</b-button>
+      <b-button variant="secondary" size="sm" @click="hideForm()">Cancelar</b-button>
     </b-form>
 
   </div>
@@ -35,10 +35,20 @@ export default {
           tags: this.tags.split(',')
         }
         this.addLinkToCollection(link)
+        this.cleanData()
       }
     },
+    cleanData () {
+      this.url = ''
+      this.title = ''
+      this.tags = ''
+    },
+    hideForm () {
+      this.showForm = false
+      this.cleanData()
+    },
     validUrl (url) {
-      return true
+      return url
     }
   }
 }
