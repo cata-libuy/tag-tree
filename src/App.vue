@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <add-link> </add-link>
-    <force-component> </force-component>
+    <router-view></router-view>
   </div>
 </template>
 

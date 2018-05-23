@@ -1,16 +1,19 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import settings from '../../config/settings'
 
 Vue.use(VueResource)
-const BASE_API = process.env.AUTH_API
+const BASE_API = settings.baseApi
 
 export const login = ({ commit, state }, userData) => {
-  if (state.loginError) commit('SET_LOGIN_ERROR', { message: null })
+  console.log('action login called with', userData)
+  if (state.loginError) commit('SET_LOGIN_ERROR', { message: null }) // Limpiamos error si hay
   const defaultErrorMessage = 'Error en inicio de sesion'
   if (userData.email && userData.password) {
     Vue.http.post(`${BASE_API}login/`, userData)
       .then(
         (response) => {
+          console.log('login response', response)
           if (response.body.user && response.body.token) {
             const user = response.body.user
             user.token = response.body.token
@@ -31,15 +34,17 @@ export const login = ({ commit, state }, userData) => {
 }
 
 export const register = ({ commit, state }, userData) => {
+  console.log('action register', userData)
   if (state.registerError) commit('SET_REGISTER_ERROR', { message: null })
   if (userData.email && userData.password) {
-    Vue.http.post(`${BASE_API}users/`, userData)
+    Vue.http.post(`${BASE_API}user`, userData)
       .then(
         () => {
           login({ commit, state }, userData)
         },
         (error) => {
-          if (error.body.invalidAttributes && error.body.invalidAttributes.email && error.body.invalidAttributes.email[0].rule === 'unique') {
+          console.log(error);
+          if (error.body && error.body.code === 11000) {
             commit('SET_REGISTER_ERROR', { message: 'Ya existe una cuenta con ese email' })
           }
           else {
