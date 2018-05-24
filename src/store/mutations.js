@@ -7,6 +7,5 @@ export const mutations = {
   },
   ['ADD_LINK'] (state, { link }) {
     state.links.push(link)
-    console.log('link added')
   }
 }

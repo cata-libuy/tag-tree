@@ -1,6 +1,5 @@
 export const mutations = {
   ['SET_USER'] (state, { user }) {
-    console.log('mutation SET_USER', user)
     state.user = null
     state.user = user
     localStorage.setItem('user', JSON.stringify(user))

@@ -6,14 +6,12 @@ Vue.use(VueResource)
 const BASE_API = settings.baseApi
 
 export const login = ({ commit, state }, userData) => {
-  console.log('action login called with', userData)
   if (state.loginError) commit('SET_LOGIN_ERROR', { message: null }) // Limpiamos error si hay
   const defaultErrorMessage = 'Error en inicio de sesion'
   if (userData.email && userData.password) {
     Vue.http.post(`${BASE_API}login/`, userData)
       .then(
         (response) => {
-          console.log('login response', response)
           if (response.body.user && response.body.token) {
             const user = response.body.user
             user.token = response.body.token
@@ -26,7 +24,7 @@ export const login = ({ commit, state }, userData) => {
             commit('SET_LOGIN_ERROR', { message })
           }
         },
-        () => {
+        (error) => {
           commit('SET_LOGIN_ERROR', { message: defaultErrorMessage })
         }
       )
@@ -34,7 +32,6 @@ export const login = ({ commit, state }, userData) => {
 }
 
 export const register = ({ commit, state }, userData) => {
-  console.log('action register', userData)
   if (state.registerError) commit('SET_REGISTER_ERROR', { message: null })
   if (userData.email && userData.password) {
     Vue.http.post(`${BASE_API}user`, userData)
@@ -43,7 +40,6 @@ export const register = ({ commit, state }, userData) => {
           login({ commit, state }, userData)
         },
         (error) => {
-          console.log(error);
           if (error.body && error.body.code === 11000) {
             commit('SET_REGISTER_ERROR', { message: 'Ya existe una cuenta con ese email' })
           }

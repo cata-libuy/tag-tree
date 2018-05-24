@@ -1,19 +1,38 @@
-<template>
-  <div id="app">
-    <add-link> </add-link>
-    <router-view></router-view>
-  </div>
+<template lang="pug">
+#app
+  main-nav
+  add-link
+  router-view
 </template>
 
 <script>
-import forceComponent from './components/force'
+import MainNav from './components/nav'
 import AddLink from './components/addLink'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'app',
   components: {
-    forceComponent,
+    MainNav,
     AddLink
+  },
+  computed: {
+    ...mapGetters(['user'])
+  },
+  watch: {
+    user: function () {
+      if (!this.user) {
+        this.$router.push('/login')
+      }
+    },
+    $route: function (to, from) {
+      if (to.meta.requireAuth && !this.user) {
+        return this.$router.push('/login')
+      }
+      if (!to.meta.requireAuth && this.user) {
+        return this.$router.push('/')
+      }
+    }
   }
 }
 </script>

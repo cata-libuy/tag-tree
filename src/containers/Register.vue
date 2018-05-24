@@ -22,6 +22,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { required, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
   name: 'Register',
@@ -36,43 +37,30 @@ export default {
   computed: {
     ...mapGetters([ 'registerError', 'user' ]),
     emailError () {
-      return this.$v.email.$dirty && (this.email.indexOf('@') < 0 || this.email.indexOf('.') < 0 || this.email.length < 4)
+      return this.email.length > 0 && (this.email.indexOf('@') < 0 || this.email.indexOf('.') < 0 || this.email.length < 4)
     },
     passwordError () {
-      return this.$v.password.$dirty && this.password.length < 6
+      return this.password.length > 0 &&this.password.length < 6
     },
     repeatPasswordError () {
-      return this.$v.password.$dirty && this.$v.passwordRepeat.$dirty && this.passwordRepeat !== this.password
+      return this.password.length > 0 && this.passwordRepeat !== this.password
     },
     formValid () {
       return this.email.length > 0 && this.password.length > 0 && this.passwordRepeat.length > 0 && !this.emailError && !this.passwordError && !this.repeatPasswordError
-    }
-  },
-  validations: {
-    email: {
-      required: true,
-      email: true
-    },
-    password: {
-      required: true
-    },
-    passwordRepeat: {
-      required: true
     }
   },
   methods: {
     ...mapActions([ 'register' ]),
     registerUser () {
       const userData = { email: this.email, password: this.password }
-      this.register(userData)
+      if (this.formValid) {
+        this.register(userData)
+      }
     },
     clearForm () {
       this.email = ''
       this.password = ''
       this.passwordRepeat = ''
-      this.$v.email.$reset()
-      this.$v.password.$reset()
-      this.$v.passwordRepeat.$reset()
       this.alertShown = false
     },
   },
@@ -85,7 +73,6 @@ export default {
       }
     },
     user: function (userData) {
-      console.log('got user', userData)
       if (userData && userData.token) {
         this.$router.push({ path: '/' })
       }
