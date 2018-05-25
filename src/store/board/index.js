@@ -2,11 +2,9 @@ import * as actions from './actions'
 import { mutations } from './mutations'
 import * as getters from './getters'
 
-export const AuthStore = {
+export const BoardStore = {
   state: {
-    user: null,
-    registerError: null,
-    loginError: null
+    userBoards: []
   },
   getters,
   mutations,

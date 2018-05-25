@@ -3,6 +3,7 @@ export const mutations = {
     state.user = null
     state.user = user
     localStorage.setItem('user', JSON.stringify(user))
+    console.log('user setted', state.user)
   },
   ['SET_REGISTER_ERROR'] (state, { message }) {
     state.registerError = message

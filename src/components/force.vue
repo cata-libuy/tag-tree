@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="force">
+    <p>Ejemplo... datos dummy</p>
     <svg id="force" :width="width" :height="height">
       <tag-node v-for="tag in simulatedNodes" :key="tag.label" :tag="tag"></tag-node>
     </svg>

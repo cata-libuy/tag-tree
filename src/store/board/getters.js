@@ -1,1 +1,1 @@
-export const boards = (state) => state.boards
+export const userBoards = (state) => state.userBoards

@@ -1,5 +1,5 @@
 export const mutations = {
-  ['SET_BOARDS'] (state, { boards }) {
-    state.boards = boards
+  ['SET_USER_BOARDS'] (state, { boards }) {
+    state.userBoards = boards
   }
 }

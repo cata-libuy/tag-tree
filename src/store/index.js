@@ -4,7 +4,10 @@ import Vuex from 'vuex'
 import * as actions from './actions'
 import { mutations } from './mutations'
 import * as getters from './getters'
-import {AuthStore }from './auth/'
+
+// Store Modules
+import { AuthStore } from './auth/'
+import { BoardStore } from './board/'
 
 Vue.use(Vuex)
 
@@ -18,7 +21,8 @@ const store = new Vuex.Store({
   mutations,
   getters,
   modules: {
-    AuthStore
+    AuthStore,
+    BoardStore
   }
 })
 
