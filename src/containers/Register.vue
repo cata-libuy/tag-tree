@@ -22,7 +22,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { required, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
   name: 'Register',
