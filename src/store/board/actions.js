@@ -53,3 +53,19 @@ export const createBoard = ({ commit, state }, params = { name: null, descriptio
       )
   }
 }
+
+export const getUserBoard = ({ commit, state }, { user, boardId }) => {
+  console.log('action getUserBoard', user, boardId)
+  if (user && boardId) {
+    Vue.http.get(`${BASE_API}user/${user._id}/board/${boardId}/reference`, { headers: { Authorization: `Bearer ${user.token}` } })
+      .then(
+        (response) => {
+          console.log('board', response.body)
+          commit('SET_BOARD', { board: response.body.board, references: response.body.references })
+        },
+        (err) => {
+          console.log('error receiving board', err)
+        }
+      )
+  }
+}

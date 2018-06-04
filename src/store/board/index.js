@@ -4,7 +4,8 @@ import * as getters from './getters'
 
 export const BoardStore = {
   state: {
-    userBoards: []
+    userBoards: [],
+    boards: []
   },
   getters,
   mutations,

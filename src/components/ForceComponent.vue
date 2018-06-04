@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="force">
-    <p>Ejemplo... datos dummy</p>
     <svg id="force" :width="width" :height="height">
       <tag-node v-for="tag in simulatedNodes" :key="tag.label" :tag="tag"></tag-node>
     </svg>
@@ -8,11 +7,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import TagNode from './TagNode'
 
 export default {
-  name: 'forceComponent',
+  name: 'ForceComponent',
+  props: ['tagsData'],
   components: {
     TagNode
   },
@@ -24,11 +24,7 @@ export default {
       simulatedNodes: []
     }
   },
-  computed: {
-    ...mapGetters(['tagsData'])
-  },
   methods: {
-    ...mapActions(['getLinks']),
     renderTags () {
       const self = this;
       const d3 = this.$d3;
@@ -75,7 +71,9 @@ export default {
     }
   },
   created () {
-    this.getLinks()
+    if (this.tagsData) {
+      this.renderTags()
+    }
   },
   watch: {
     tagsData: function () {

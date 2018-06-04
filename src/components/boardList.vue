@@ -4,6 +4,7 @@
   b-button(size="md", @click="openCreateModal") Crear
   b-card-group(columns)
       b-card.board-card(v-for="board in boards", :title="board.name")
+        p {{ board.description }}
         b-button(variant="primary", :to="{ name: 'Board', params: { boardId: board._id } }") Ver
         b-button(variant="danger", size="sm", @click="showDeleteModal(board)") Eliminar
 
