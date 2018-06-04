@@ -1,8 +1,9 @@
 <template lang="pug">
 #app
   main-nav
-  //- add-link
-  router-view
+  .app-container
+    //- add-link
+    router-view
 </template>
 
 <script>
@@ -61,6 +62,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  // margin-top: 60px;
+  .app-container {
+    padding-top: 30px;
+  }
 }
 </style>

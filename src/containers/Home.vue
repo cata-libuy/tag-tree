@@ -1,7 +1,5 @@
 <template lang="pug">
   .home
-    h1 Home
-    h2 Tus Colecciones
     board-list(:boards="userBoards")
 </template>
 
